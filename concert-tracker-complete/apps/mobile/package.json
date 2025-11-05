@@ -1,0 +1,16 @@
+{
+  "name": "concert-tracker-mobile",
+  "private": true,
+  "main": "expo/main",
+  "scripts": {
+    "start": "expo start",
+    "android": "expo run:android",
+    "ios": "expo run:ios"
+  },
+  "dependencies": {
+    "expo": "~51.0.0",
+    "react": "18.2.0",
+    "react-native": "0.74.3",
+    "@supabase/supabase-js": "2.45.4"
+  }
+}
