@@ -36,8 +36,25 @@ create index if not exists shows_status_start_idx on public.shows(status, start_
 create index if not exists shows_user_dedupe_idx on public.shows(user_id, dedupe_key);
 
 -- Trigger helper (available on Supabase)
-create or replace trigger set_updated_at before update on public.shows
-for each row execute function supabase_functions.update_updated_at();
+-- 1) Create a local trigger function that updates updated_at
+create or replace function public.set_updated_at()
+returns trigger
+language plpgsql
+as $$
+begin
+  new.updated_at := now();
+  return new;
+end;
+$$;
+
+-- 2) (Re)create the trigger on your table(s)
+drop trigger if exists set_updated_at on public.shows;
+
+create trigger set_updated_at
+before update on public.shows
+for each row
+execute function public.set_updated_at();
+
 
 -- ICS tokens (per-user private feed)
 create table if not exists public.ics_tokens (
